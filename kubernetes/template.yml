@@ -1,0 +1,285 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-and-payment
+  labels:
+    app: order-and-payment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-and-payment
+  template:
+    metadata:
+      labels:
+        app: order-and-payment
+    spec:
+      containers:
+        - name: order-and-payment
+          image: username/order-and-payment:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-management
+  labels:
+    app: delivery-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-management
+  template:
+    metadata:
+      labels:
+        app: delivery-management
+    spec:
+      containers:
+        - name: delivery-management
+          image: username/delivery-management:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-service
+  labels:
+    app: customer-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-service
+  template:
+    metadata:
+      labels:
+        app: customer-service
+    spec:
+      containers:
+        - name: customer-service
+          image: username/customer-service:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketing-advertising
+  labels:
+    app: marketing-advertising
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: marketing-advertising
+  template:
+    metadata:
+      labels:
+        app: marketing-advertising
+    spec:
+      containers:
+        - name: marketing-advertising
+          image: username/marketing-advertising:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: it-technology-server-management
+  labels:
+    app: it-technology-server-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: it-technology-server-management
+  template:
+    metadata:
+      labels:
+        app: it-technology-server-management
+    spec:
+      containers:
+        - name: it-technology-server-management
+          image: username/it-technology-server-management:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-and-payment
+  labels:
+    app: order-and-payment
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: order-and-payment
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery-management
+  labels:
+    app: delivery-management
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: delivery-management
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-service
+  labels:
+    app: customer-service
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: customer-service
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: marketing-advertising
+  labels:
+    app: marketing-advertising
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: marketing-advertising
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: it-technology-server-management
+  labels:
+    app: it-technology-server-management
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: it-technology-server-management
+

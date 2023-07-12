@@ -1,0 +1,87 @@
+name: github-action
+run-name: ${{ github.actor }} is out building GitHub Actions
+
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:        
+      - '**' 
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build Maven Projects
+        run: |
+          mvn clean package -f ./order-and-payment/pom.xml
+          mvn clean package -f ./delivery-management/pom.xml
+          mvn clean package -f ./customer-service/pom.xml
+          mvn clean package -f ./marketing-advertising/pom.xml
+          mvn clean package -f ./it-technology-server-management/pom.xml
+
+      - name: Docker Build and push for OrderAndPayment
+        uses: docker/build-push-action@v4
+        with:
+          context: ./order-and-payment
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/order-and-payment:latest
+            ghcr.io/${{ github.repository }}/order-and-payment:${{ github.ref_name }}
+            
+      - name: Docker Build and push for DeliveryManagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./delivery-management
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/delivery-management:latest
+            ghcr.io/${{ github.repository }}/delivery-management:${{ github.ref_name }}
+            
+      - name: Docker Build and push for CustomerService
+        uses: docker/build-push-action@v4
+        with:
+          context: ./customer-service
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/customer-service:latest
+            ghcr.io/${{ github.repository }}/customer-service:${{ github.ref_name }}
+            
+      - name: Docker Build and push for MarketingAdvertising
+        uses: docker/build-push-action@v4
+        with:
+          context: ./marketing-advertising
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/marketing-advertising:latest
+            ghcr.io/${{ github.repository }}/marketing-advertising:${{ github.ref_name }}
+            
+      - name: Docker Build and push for ItTechnologyServerManagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./it-technology-server-management
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/it-technology-server-management:latest
+            ghcr.io/${{ github.repository }}/it-technology-server-management:${{ github.ref_name }}
+            
